@@ -1,12 +1,12 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.filedialog
-import matplotlib
-matplotlib.use("TkAgg")
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
-from matplotlib.figure import Figure
 import numpy as np
 import math
+import matplotlib
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
+from matplotlib.figure import Figure
+matplotlib.use("TkAgg")
 
 import pars
 import ssaCore
@@ -112,13 +112,6 @@ combBox.current(0)
 calcLn = tk.Button(frame, text='Показать данные', command=showData)
 calcLn.pack(side=tk.LEFT, padx=(10), pady=(5))
 
-# calcLn = tk.Button(frame, text='Показать ln')
-# calcLn.pack(side=tk.LEFT, padx=(10), pady=(5))
-# showComp = tk.Button(frame, text='Востонофить по компонентам')
-# showComp.pack(side=tk.LEFT, padx=(10), pady=(5))
-# enterComps = tk.Entry(frame, width=15)
-# enterComps.pack(side=tk.LEFT, padx=(10), pady=(5))
-
 frame = tk.Frame()
 frame.pack()
 enterL = tk.Label(frame, text="Длина окна:", background = "gray85")
@@ -127,27 +120,17 @@ lenT = tk.Entry(frame, width=5)
 lenT.pack(side=tk.LEFT, padx=(0, 10), pady=(5))
 filterB = tk.Button(frame, text='Отфильтровать', command=showFilt)
 filterB.pack(side=tk.LEFT, padx=(10), pady=(5))
-# trendB = tk.Button(frame, text='Тренд')
-# trendB.pack(side=tk.LEFT, padx=(10), pady=(5))
-# perB = tk.Button(frame, text='Переод')
-# perB.pack(side=tk.LEFT, padx=(10), pady=(5))
 forcastB = tk.Button(frame, text='Предсказать на', command=forecast)
 forcastB.pack(side=tk.LEFT, padx=(10, 5), pady=(5))
 forecastT = tk.Entry(frame, width=5)
 forecastT.pack(side=tk.LEFT, padx=(0, 10), pady=(5))
 
-# saveData = tk.Button(root, text='Сохранить текущие данные')
-# saveData.grid(row=3, column=0, padx=(10), pady=(5), columnspan=2, sticky="ew")
-# savePlot = tk.Button(root, text='Сохранить текущий график')
-# savePlot.grid(row=3, column=2, padx=(10), pady=(5), columnspan=2, sticky="ew")
-
 fig = Figure(figsize=(4, 3), dpi=100)
-canvas = FigureCanvasTkAgg(fig, master=root)  # A tk.DrawingArea.
+canvas = FigureCanvasTkAgg(fig, master=root)
 canvas.get_tk_widget().pack(side=tk.TOP, fill=tkinter.BOTH, expand=1)
 
 toolbar = NavigationToolbar2Tk(canvas, root)
 toolbar.update()
 canvas.get_tk_widget().pack(side=tk.TOP, fill=tkinter.BOTH, expand=1)
-
 
 root.mainloop()

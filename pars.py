@@ -1,6 +1,7 @@
 class Parser():
 
     def read(self, fileName):
+        
         self.year = []
         self.month = []
         self.day = []
@@ -16,12 +17,15 @@ class Parser():
         self.bPMx = []
         self.bPMy = []
         self.bUTC = []
+
         fileLen = 0
         f = open(fileName, "r")
         for line in f:   
+            # Считать mjd
             mjd = float(line[7:15].replace(" ", ""))
             self.MJD.append(mjd)
             
+            # Год, месяц, день
             yr =  line[0:2].replace(" ", "")
             if len(yr) == 1:
                 yr = "0" + yr
@@ -35,6 +39,7 @@ class Parser():
             self.IERSpolar = line[17].replace(" ", "")
             self.IERSutc.append(line[57].replace(" ", ""))    
             
+            # A: X, Y, UTC 
             x = line[18:27].replace(" ", "")
             try:
                 if x[0] == "-":
@@ -51,8 +56,7 @@ class Parser():
                 else:
                     self.aPMy.append(float("0"+y))     
             except:
-                self.aPMy.append(self.aPMy[-1])       
-                        
+                self.aPMy.append(self.aPMy[-1])                              
             
             u = line[58:68].replace(" ", "")
             try:
@@ -70,6 +74,7 @@ class Parser():
                 self.aUTC.append(self.aUTC[-1])    
                     
                     
+            # B: X, Y, UTC 
             x = line[134:144].replace(" ", "")
             try:
                 if x[0] == "-":
@@ -106,6 +111,10 @@ class Parser():
         return fileLen 
     
     def getData(self, name):
+        """
+        Получить необходимые данные
+        Возвращает соответствующие данные
+        """
         if name == "X (A)":
             return self.aPMx 
         if name == "X (B)":
