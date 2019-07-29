@@ -1,10 +1,15 @@
+from datetime import datetime
+
 class Parser():
 
     def read(self, fileName):
-        
+        """
+        Считать файл
+        """
         self.year = []
         self.month = []
         self.day = []
+        self.date = []
         self.MJD = []
 
         self.IERSpolar = []
@@ -30,11 +35,18 @@ class Parser():
             if len(yr) == 1:
                 yr = "0" + yr
             if mjd < 51544.0:
-                self.year.append(int("19" + yr))
+                yr = "19" + yr
+                self.year.append(int(yr))
             else:
-                self.year.append(int("20" + yr))        
-            self.month.append(int(line[2:4].replace(" ", "")))    
-            self.day.append(int(line[4:6].replace(" ", "")))
+                yr = "20" + yr
+                self.year.append(int(yr))
+            mon = line[2:4].replace(" ", "")
+            self.month.append(int(mon))    
+            d = line[4:6].replace(" ", "")
+            self.day.append(int(d))
+
+            dt = datetime.strptime(yr+"/"+mon+"/"+d, "%Y/%m/%d")
+            self.date.append(dt)
             
             self.IERSpolar = line[17].replace(" ", "")
             self.IERSutc.append(line[57].replace(" ", ""))    
@@ -109,7 +121,10 @@ class Parser():
                 self.bUTC.append(self.bUTC[-1])     
             fileLen += 1
         return fileLen 
-    
+
+    def getDate(self):
+        return self.date
+
     def getData(self, name):
         """
         Получить необходимые данные
