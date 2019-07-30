@@ -4,6 +4,7 @@ import tkinter.filedialog
 import numpy as np
 import math
 import matplotlib
+import matplotlib.pyplot as plt
 import datetime
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
@@ -24,8 +25,10 @@ filename = ""
 length = 0
 mode = -1
 
+plt.rcParams["date.autoformatter.hour"] = "%Y-%m-%d"
+
 def drawPlot():
-    global data, forc, filt, mode, trend, period, date
+    global data, forc, filt, mode, trend, period, date, mainData
     if mode == -1:
         return
     begin, end = getSize()
@@ -33,9 +36,9 @@ def drawPlot():
         fig.clf()
         ax = fig.add_subplot(111)
         if cvar1.get():
-            ax.plot(date[begin:end], data[begin:end], linestyle='-', marker='o')
+            ax.plot(date[begin:end], mainData[begin:end], linestyle='-', marker='o')
         else:
-            ax.plot(date[begin:end], data[begin:end])
+            ax.plot(date[begin:end], mainData[begin:end])
         ax.set_title("Начальные данные")
         fig.tight_layout()
         canvas.draw()
@@ -43,9 +46,9 @@ def drawPlot():
         fig.clf()
         ax1 = fig.add_subplot(231)
         if cvar1.get():
-            ax1.plot(date[begin:end], data[begin:end], linestyle='-', marker='o')
+            ax1.plot(date[begin:end],  mainData[begin:end], linestyle='-', marker='o')
         else:
-            ax1.plot(date[begin:end], data[begin:end])
+            ax1.plot(date[begin:end],  mainData[begin:end])
         ax1.set_title("Начальные данные")
 
         ax2 = fig.add_subplot(232)
@@ -59,7 +62,7 @@ def drawPlot():
         newDate = date[begin:end]
         for i in range(len(forc) - len(filt)):
             newDate.append(newDate[-1]+datetime.timedelta(days=1))
-        t = newDate[end-1:]
+        t = newDate[end-begin-1:]
         b = len(forc)-len(t)
         if cvar1.get():
             ax3.plot(date[begin:end], filt, label = "Отфильтрованные", linestyle='-', marker='o')
@@ -97,8 +100,7 @@ def drawPlot():
         newDate = date[begin:end]
         for i in range(len(forc) - len(filt)):
             newDate.append(newDate[-1]+datetime.timedelta(days=1))
-        t = newDate[end-1:]
-        # print(t)
+        t = newDate[end-begin-1:]
         t2 = date[begin:end+len(t)-1]
         b = len(forc)-len(t)
         if cvar1.get():
@@ -113,8 +115,6 @@ def drawPlot():
         ax.legend()
         canvas.draw()
     
-
-
 
 def getSize():
     try:
@@ -257,7 +257,7 @@ def fact():
                 relative += abs(a / mainData[end+j])
                 j+=1
             errorText.set("Абсолютная средняя ошибка: " + str(round(absolute/j,2)) + \
-            "\n Относительная средняя ошибка: " +str(round(relative/j,2)*100) +"%")
+            "\n Относительная средняя ошибка: " +str(round(relative/j,1)*100) +"%")
             mode = 2 
             drawPlot()
         except:
