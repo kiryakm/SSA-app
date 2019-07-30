@@ -50,8 +50,16 @@ class SSA():
         
     def getFilt(self):
         return self.tsRec
+    
+    def getTrend(self):
+        self.reconstruct([0])
+        return self.tsRec
 
-    def forecastPrep(self):
+    def getPeriod(self):
+        self.reconstruct(np.arange(1,10))
+        return self.tsRec
+    
+    def forecast(self, steps):
         self.verticalityCoeff = 0
         self.R = np.zeros(self.orthonormalBase[0].shape)[:-1]
         for Pi in self.orthonormalBase.values():
@@ -59,9 +67,7 @@ class SSA():
             self.verticalityCoeff += pi**2
             self.R += pi*Pi[:-1]
         self.R = np.matrix(self.R/(1-self.verticalityCoeff))
-    
-    def forecast(self, steps):
-        self.forecastPrep()
+
         self.tsForecast = self.tsRec
         for i in range(self.N + steps):
             if i >= self.N:
